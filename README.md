@@ -1,11 +1,10 @@
 # Rhein — 3D-Datenvisualisierung
 
-Three.js-Projekt zur 3D-Darstellung des Rheins im Browser (Firefox/Chrome).
+Projekt zur 3D-Darstellung des Gefälle und des Verlaufs von Flüssen im Herzen Europas.
 
 Die Flussgeometrie wird aus OpenStreetMap (Overpass API, Relation `Rhein`)
-geladen. Als Höhe (Z-Wert) wird linear interpoliert: **2000 m an der Quelle**
-(Schweiz, Vorderrhein/Tomasee) bis **0 m an der Mündung** (Nordsee bei Rotterdam).
-Die Höhe entlang des Flusses ergibt sich aus der kürzesten Weglänge zum Quell-Knoten.
+geladen. Als Höhe (Z-Wert) wird aus FABDEM bezogen oder bei schwierigkeiten linear interpoliert:
+**2000 m an der Quelle**
 
 ## Starten
 
@@ -15,13 +14,25 @@ ES-Module laden nicht über `file://`, daher eine lokale Server-Instanz nutzen:
 # Variante A: Python
 python -m http.server 8000
 
-# Variante B: Node
-npx serve .
-```
-
 Dann `http://localhost:8000` im Browser öffnen.
 
-## Daten neu laden
+# Variante B: Github Pages
+https://zialo1.github.io/eduriversCEU/
+```
+
+
+## Weitere Flüsse hinzufügen
+
+Mit beiliegenden Python Scripts können weitere Flüsse dazugefügt werden. Es entstehen durch die Tools json Files.
+Diese müssen in Conf.yaml eingepflegt werden. Die Fluss-JSON Datei können mit dem python script smooth2.py geglättet werden.
+Bitte alle Daten dann in newrivers und einem unterverzeichnis für andere hochladen. Die Dateien in diesem Verzeichnis müssen Benutzer dann ins Verzeichnis serverhtml kopieren und die alten Dateien mit dem gleichen Namen überschreiben. Zu den
+Dateien gehören auch die Contours Files.
+
+## Zukünftige Schritte.
+Contour Dateien abschalten, besser anzeigen oder bessere JSON files generieren.
+
+
+## Skripte für Generierung von Daten
 
 - `fetch_rhein.py` lädt die OSM-Relation `Rhein` (Overpass API) und schreibt
   `rhein.json` (flache Liste von `[lon, lat, hoehe_m]`, Höhe 2000 m Quelle → 0 m Mündung):
@@ -36,8 +47,7 @@ Dann `http://localhost:8000` im Browser öffnen.
 
 ## Was wird gezeigt
 
-- **Rhein** als Punktwolke + Linienzug, Höhe linear 2000 m (Quelle) → 0 m (Mündung).
-- **Ländergrenzen** (admin_level 2) als Linien.
+- **Flüsse** Flüsse mit ihrer Steigung.
 - **Seen** gefüllt, inkl. Beschriftung.
 - **Städte**: entlang des Rheins (≤ 10 km), aber nur die „Rekord“-Städte —
   eine Stadt wird nur gezeigt, wenn ihre Einwohnerzahl größer ist als die
@@ -49,6 +59,7 @@ Dann `http://localhost:8000` im Browser öffnen.
 - Maus: drehen / zoomen (OrbitControls, Auto-Rotation)
 - Klick auf die Legende oder Pfeiltasten: Höhen-SchnittEbene —
   es bleibt der Flussabschnitt bis zur gewählten Höhe sichtbar.
+- Innerhalb der Schweiz können die Abflussdaten live angezeigt werden wo vorhanden.
 
 ## Struktur
 
